@@ -1,19 +1,44 @@
-// Scroll
-var namesToIgnore = ['']; // Your IG username
-var images = document.querySelectorAll('img[alt]');
-var matchingImages = Array.from(images).filter(img => {
+// 1. COPY AND PASTE FROM HERE <--
+function loadAllElements(){
+  async function autoScroll(element) {
+    const distance = 200; // px per step
+    const delay = 300;    // ms between scrolls
 
-    if( namesToIgnore.includes(img.alt.split("'")[0] )){
-        return false;
+    while (element.scrollTop + element.clientHeight < element.scrollHeight) {
+      element.scrollBy(0, distance);
+      await new Promise(r => setTimeout(r, delay));
     }
+  }
 
-    return /^.+?'s profile picture$/.test(img.alt);
-});
+  var search = document.querySelector('input[placeholder="Busca"]');
+  var prevNodeOne = search.parentNode;
+  var prevNodeTwo = prevNodeOne.parentNode;
 
-// Get all User DIVS
-var usernames = [];
-for(let img of matchingImages){
-    usernames.push(img.getAttribute("alt").split("'")[0]);
+  var scrolleable = prevNodeTwo.nextSibling;
+
+  autoScroll(scrolleable);
 }
 
-console.log(usernames);
+loadAllElements();
+
+// TO HERE <-- ON THE CONSOLE WHILE THE FOLLOWERS/FOLLOWING POPUP IS OPEN
+
+// 2. SAME, COPY AND EXECUTE ON THE CONSOLE
+function parseProfiles(){
+    const profiles = document.querySelectorAll('div[role="dialog"] img[alt][draggable]');
+
+    const usernames = [];
+    profiles.forEach((profile) => {
+        const alt = profile.getAttribute("alt");
+        const toProcess = alt.split(" ");
+
+        const username = toProcess[toProcess.length - 1];
+
+        usernames.push(username);
+    });
+
+    console.log(usernames)
+}
+
+// 3. FINAL RESULT DISPLAY ON THE CONSOLE (COPY FOLLOWER AND FOLLOWING ON THE OTHER SCRIPT TO COMPARE)
+const following = parseProfiles();
